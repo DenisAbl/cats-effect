@@ -81,7 +81,7 @@ object IOIntro {
   //5 discard value inside IO just return IO
   def asUnit[A](ioa: IO[A]): IO[Unit] = ioa.map(_ => ())
   def asUnit_v2[A](ioa: IO[A]): IO[Unit] = ioa.as(()) // bad practice
-  def asUnit_v3[A](ioa: IO[A]): IO[Unit] = ioa.void // bad practice
+  def asUnit_v3[A](ioa: IO[A]): IO[Unit] = ioa.void
 
   //6 fix stack recursion
   def sum(n: Int): Int = if (n <= 0) 0 else n + sum(n - 1)
