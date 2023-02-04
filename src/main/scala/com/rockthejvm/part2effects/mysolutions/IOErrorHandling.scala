@@ -57,7 +57,8 @@ object IOErrorHandling {
   def handleIOErrorWith[A](io: IO[A])(handler: Throwable => IO[A]): IO[A] = io.handleErrorWith(handler)
 
   def main(args: Array[String]): Unit = {
-    import cats.effect.unsafe.IORuntime.global //just to try, can import directly instance from implicit package
+    import cats.effect.unsafe.IORuntime.global //just to try, can import directly instance from implicit package import cats.effect.unsafe.implicits.global
+
     implicit val glo = global
 //    failedComp.unsafeRunSync()
 //    failure.unsafeRunSync()
