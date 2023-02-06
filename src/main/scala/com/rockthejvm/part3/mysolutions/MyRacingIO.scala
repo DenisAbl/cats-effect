@@ -1,7 +1,9 @@
 package com.rockthejvm.part3.mysolutions
 
+import cats.effect.IO.{IOCont, Uncancelable}
 import cats.effect.{Fiber, IO, IOApp, Outcome}
 
+import scala.concurrent.TimeoutException
 import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
 object MyRacingIO extends IOApp.Simple {
@@ -54,10 +56,18 @@ object MyRacingIO extends IOApp.Simple {
    * 3 - implement race in terms of racePair
    */
   // 1
-  def timeout[A](io: IO[A], duration: FiniteDuration): IO[A] = ???
+  def timeout[A](io: IO[A], duration: FiniteDuration): IO[A] = {
+    IO.race(io, IO.sleep(duration)) flatMap {
+      case Left(value) => IO(value)
+      case Right(timeout) => IO.raiseError(new TimeoutException("Timeout exceeded"))
+    }
+  }
 
   // 2
-  def unrace[A, B](ioa: IO[A], iob: IO[B]): IO[Either[A, B]] = ???
+  def unrace[A, B](ioa: IO[A], iob: IO[B]): IO[Either[A, B]] =
+    IO.racePair(ioa, iob).flatMap {
+
+    }
 
 
   // 3
